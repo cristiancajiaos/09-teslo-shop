@@ -18,7 +18,7 @@ export class HomePage {
     params: () => ({})
     */
     stream: () => {
-      return this.productService.getProducts();
+      return this.productService.getProducts({});
     }
   });
 
