@@ -6,7 +6,9 @@
       />
     </figure>
     <div class="card-body">
-      <h2 class="card-title font-montserrat text-accent text-xl">{{product().title}}</h2>
+      <a [routerLink]="['/product', product().slug]">
+         <h2 class="card-title font-montserrat text-accent text-xl">{{product().title}}</h2>
+      </a>
       <p>
         {{product().description | slice:0:70}} ...
       </p>
