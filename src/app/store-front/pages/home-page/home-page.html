@@ -14,5 +14,5 @@
 
   <app-pagination
     [pages]="productsResource.value()?.pages ?? 0"
-    [currentPage]="currentPage()"/>
+    [currentPage]="paginationService.currentPage()"/>
 </section>
