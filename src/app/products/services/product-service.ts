@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Product, ProductResponse } from '@products/interfaces/product.interface';
-import { Observable, of, tap } from 'rxjs';
+import { delay, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 
 const baseUrl = environment.baseUrl;
@@ -17,6 +17,8 @@ export class ProductService {
   private http = inject(HttpClient);
 
   private productsCache = new Map<string, ProductResponse>();
+
+  private productCache = new Map<string, Product>();
 
   getProducts(options: Options): Observable<ProductResponse> {
 
@@ -40,6 +42,15 @@ export class ProductService {
   }
 
   getProductByIdSlug(idSlug: string): Observable<Product> {
-    return this.http.get<Product>(`${baseUrl}/products/${idSlug}`)
+    const key = `${idSlug}`;
+    if (this.productCache.has(key)) {
+      return of(this.productCache.get(key)!);
+    }
+
+    return this.http.get<Product>(`${baseUrl}/products/${idSlug}`).pipe(
+      delay(2000),
+      tap((product) => console.log(product)),
+      tap((product) => this.productCache.set(key, product))
+    );
   }
 }
