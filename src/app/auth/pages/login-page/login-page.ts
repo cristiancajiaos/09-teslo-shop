@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import { AuthService } from '@auth/services/auth-service';
 @Component({
   selector: 'app-login-page',
   imports: [RouterLink, ReactiveFormsModule],
@@ -10,9 +11,12 @@ import { FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 export class LoginPage {
 
   private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router)
 
   hasError = signal(false);
   isPosting = signal(false);
+
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -28,8 +32,24 @@ export class LoginPage {
       return;
     }
 
-    const {email = '', password = ''} = this.loginForm.value
+    const {email = '', password = ''} = this.loginForm.value;
 
-    console.log({email, password});
+    this.authService.login(email!, password!).subscribe(isAuthenticated => {
+      if (isAuthenticated) {
+        this.router.navigateByUrl('/');
+      } else {
+        this.hasError.set(true);
+        setTimeout(() => {
+        this.hasError.set(false);
+      }, 2000);
+      }
+    })
   }
+
+  // Check Authentication
+
+
+  // Registro
+
+  // Logout
 }
