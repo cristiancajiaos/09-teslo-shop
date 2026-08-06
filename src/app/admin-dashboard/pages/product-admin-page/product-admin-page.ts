@@ -4,10 +4,11 @@ import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '@products/services/product-service';
 import { map } from 'rxjs';
+import { ProductDetails } from './product-details/product-details';
 
 @Component({
   selector: 'app-product-admin-page',
-  imports: [],
+  imports: [ProductDetails],
   templateUrl: './product-admin-page.html',
   changeDetection: ChangeDetectionStrategy.Eager,
 })

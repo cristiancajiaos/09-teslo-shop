@@ -5,6 +5,6 @@
     </div>
   }
   @if (productResource.hasValue()) {
-    <p>{{ productResource.value()?.title }}</p>
+    <product-details [product]="productResource.value()!"/>
   }
 </section>
