@@ -9,6 +9,7 @@
       "@shared/*": ["./src/app/shared/*"],
       "@store-front/*": ["./src/app/store-front/*"],
       "@dashboard/*": ["./src/app/admin-bashboard/*"],
+      "@utils/*": ["./src/app/utils/*"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
