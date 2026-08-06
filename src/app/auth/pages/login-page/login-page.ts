@@ -45,11 +45,4 @@ export class LoginPage {
       }
     })
   }
-
-  // Check Authentication
-
-
-  // Registro
-
-  // Logout
 }

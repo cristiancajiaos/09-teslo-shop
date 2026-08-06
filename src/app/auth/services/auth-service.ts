@@ -36,6 +36,19 @@ export class AuthService {
   user = computed(() => this._user());
   token = computed(() => this._token());
 
+  register(fullName: string, email: string, password: string): Observable<boolean> {
+    return this.http.post<AuthResponse>(`${baseUrl}/auth/register`, {
+      fullName: fullName,
+      email: email,
+      password: password
+    }).pipe(
+      map((resp) => this.handleAuthSuccess(resp)),
+      catchError((error) => {
+        return this.handleAuthError(error);
+      })
+    )
+  }
+
   login(email: string, password: string): Observable<boolean> {
     return this.http
       .post<AuthResponse>(`${baseUrl}/auth/login`, {
