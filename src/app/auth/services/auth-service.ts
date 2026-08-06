@@ -35,6 +35,7 @@ export class AuthService {
 
   user = computed(() => this._user());
   token = computed(() => this._token());
+  isAdmin = computed(() => this._user()?.roles.includes('admin') ?? false);
 
   register(fullName: string, email: string, password: string): Observable<boolean> {
     return this.http.post<AuthResponse>(`${baseUrl}/auth/register`, {
@@ -89,6 +90,7 @@ export class AuthService {
   }
 
   private handleAuthSuccess({user, token}: AuthResponse) {
+    console.log(user);
     this._authStatus.set('authenticated');
     this._user.set(user);
     this._token.set(token);
