@@ -5,10 +5,11 @@ import { PaginationService } from '@shared/components/pagination/pagination-serv
 import { Pagination } from '@shared/components/pagination/pagination';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { JsonPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-products-admin-page',
-  imports: [ProductTable, Pagination],
+  imports: [ProductTable, Pagination, RouterLink],
   templateUrl: './products-admin-page.html',
   changeDetection: ChangeDetectionStrategy.Eager,
 })

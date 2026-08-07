@@ -5,6 +5,7 @@ import { ProductService } from '@products/services/product-service';
 import { FormErrorLabel } from '@shared/components/form-error-label/form-error-label';
 import { ProductCarousel } from '@store-front/components/product-carousel/product-carousel';
 import { FormUtils } from '@utils/form-utils';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'product-details',
@@ -13,9 +14,9 @@ import { FormUtils } from '@utils/form-utils';
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class ProductDetails implements OnInit {
-
   private fb = inject(FormBuilder);
   private productService = inject(ProductService);
+  private router = inject(Router);
 
   public formUtils = FormUtils;
 
@@ -42,7 +43,7 @@ export class ProductDetails implements OnInit {
   setFormValue(formLike: Partial<Product>) {
     // this.productForm.reset(this.product() as any);
     this.productForm.patchValue(formLike as any);
-    this.productForm.patchValue({tags: formLike.tags?.join(',')})
+    this.productForm.patchValue({ tags: formLike.tags?.join(',') });
   }
 
   onSizeClicked(size: string) {
@@ -54,7 +55,7 @@ export class ProductDetails implements OnInit {
       currentSizes.push(size);
     }
 
-    this.productForm.patchValue({sizes: currentSizes});
+    this.productForm.patchValue({ sizes: currentSizes });
   }
 
   onSubmit(): void {
@@ -69,13 +70,24 @@ export class ProductDetails implements OnInit {
 
     const productLike: Partial<Product> = {
       ...(formValue as any),
-      tags: formValue.tags?.toLowerCase().split(',').map(tag => tag.trim()) ?? []
-    }
+      tags:
+        formValue.tags
+          ?.toLowerCase()
+          .split(',')
+          .map((tag) => tag.trim()) ?? [],
+    };
 
-    this.productService.updateProduct(this.product().id, productLike).subscribe(
-      (product) => {
-        console.log('producto actualizado')
-      }
-    );
+    if (this.product().id === 'new') {
+      // Crear producto
+      this.productService.createProduct(productLike).subscribe(product => {
+        console.log('producto creado');
+        this.router.navigate(['/admin/products', product.id]);
+      });
+    } else {
+      // Actualizar producto
+      this.productService.updateProduct(this.product().id, productLike).subscribe((product) => {
+        console.log('producto actualizado');
+      });
+    }
   }
 }

@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
-import { Product, ProductResponse } from '@products/interfaces/product.interface';
+import { Gender, Product, ProductResponse } from '@products/interfaces/product.interface';
 import { delay, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
+import { User } from '@auth/interfaces/user.interface';
 
 const baseUrl = environment.baseUrl;
 
@@ -11,6 +12,20 @@ interface Options {
   offset?: number;
   gender?: string;
 }
+
+const emptyProduct: Product = {
+  id: 'new',
+  title: '',
+  price: 0,
+  description: '',
+  slug: '',
+  stock: 0,
+  sizes: [],
+  gender: Gender.Men,
+  tags: [],
+  images: [],
+  user: {} as User
+};
 @Service()
 export class ProductService {
 
@@ -55,6 +70,10 @@ export class ProductService {
   }
 
   getProductById(id: string): Observable<Product> {
+    if (id === 'new') {
+      return of(emptyProduct);
+    }
+
     const key = `${id}`;
     if (this.productCache.has(key)) {
       return of(this.productCache.get(key)!);
@@ -90,5 +109,11 @@ export class ProductService {
 
     console.log('Caché actualizado');
 
+  }
+
+  createProduct(productLike: Partial<Product>): Observable<Product> {
+    return this.http.post<Product>(`${baseUrl}/products`, productLike).pipe(
+      tap((product) => this.updateProductCache(product))
+    )
   }
 }

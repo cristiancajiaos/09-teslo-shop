@@ -16,7 +16,7 @@ export const adminDashboardRoutes: Routes = [
         pathMatch: 'full',
       },
       {
-        path: 'product/:id',
+        path: 'products/:id',
         component: ProductAdminPage,
         pathMatch: 'full',
       },
