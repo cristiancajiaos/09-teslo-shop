@@ -69,6 +69,26 @@ export class ProductService {
 
 
   updateProduct(id: string, productLike: Partial<Product>): Observable<Product> {
-    return this.http.patch<Product>(`${baseUrl}/products/${id}`, productLike)
+    return this.http.patch<Product>(`${baseUrl}/products/${id}`, productLike).pipe(
+      tap((product) => this.updateProductCache(product))
+    )
+  }
+
+  updateProductCache(product: Product) {
+    const productId = product.id;
+
+    /* Actualizar caché del producto */
+    this.productCache.set(productId, product);
+
+    /* Actualizar caché de productos */
+    this.productsCache.forEach(productResponse => {
+      productResponse.products = productResponse.products.map(
+        (currentProduct) =>
+          currentProduct.id === productId ? product : currentProduct
+      )
+    });
+
+    console.log('Caché actualizado');
+
   }
 }
