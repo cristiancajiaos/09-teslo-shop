@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Product } from '@products/interfaces/product.interface';
+import { ProductService } from '@products/services/product-service';
 import { FormErrorLabel } from '@shared/components/form-error-label/form-error-label';
 import { ProductCarousel } from '@store-front/components/product-carousel/product-carousel';
 import { FormUtils } from '@utils/form-utils';
@@ -14,6 +15,7 @@ import { FormUtils } from '@utils/form-utils';
 export class ProductDetails implements OnInit {
 
   private fb = inject(FormBuilder);
+  private productService = inject(ProductService);
 
   public formUtils = FormUtils;
 
@@ -70,6 +72,10 @@ export class ProductDetails implements OnInit {
       tags: formValue.tags?.toLowerCase().split(',').map(tag => tag.trim()) ?? []
     }
 
-    console.log({productLike});
+    this.productService.updateProduct(this.product().id, productLike).subscribe(
+      (product) => {
+        console.log('producto actualizado')
+      }
+    );
   }
 }
