@@ -1,18 +1,21 @@
 import { ChangeDetectionStrategy, Component, input, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Product } from '@products/interfaces/product.interface';
+import { FormErrorLabel } from '@shared/components/form-error-label/form-error-label';
 import { ProductCarousel } from '@store-front/components/product-carousel/product-carousel';
 import { FormUtils } from '@utils/form-utils';
 
 @Component({
   selector: 'product-details',
-  imports: [ProductCarousel, ReactiveFormsModule],
+  imports: [ProductCarousel, ReactiveFormsModule, FormErrorLabel],
   templateUrl: './product-details.html',
   changeDetection: ChangeDetectionStrategy.Eager,
 })
 export class ProductDetails implements OnInit {
 
   private fb = inject(FormBuilder);
+
+  public formUtils = FormUtils;
 
   product = input.required<Product>();
 
@@ -53,6 +56,7 @@ export class ProductDetails implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.productForm.value);
+    const isValid = this.productForm.valid;
+    console.log(this.productForm.value, {isValid});
   }
 }
