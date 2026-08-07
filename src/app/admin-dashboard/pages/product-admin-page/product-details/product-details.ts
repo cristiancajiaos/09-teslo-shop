@@ -40,6 +40,18 @@ export class ProductDetails implements OnInit {
     this.productForm.patchValue({tags: formLike.tags?.join(',')})
   }
 
+  onSizeClicked(size: string) {
+    const currentSizes = this.productForm.value.sizes ?? [];
+
+    if (currentSizes.includes(size)) {
+      currentSizes.splice(currentSizes.indexOf(size), 1);
+    } else {
+      currentSizes.push(size);
+    }
+
+    this.productForm.patchValue({sizes: currentSizes});
+  }
+
   onSubmit(): void {
     console.log(this.productForm.value);
   }
