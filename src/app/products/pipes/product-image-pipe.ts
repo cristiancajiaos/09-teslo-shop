@@ -7,11 +7,15 @@ const noImage = 'assets/images/no-image.jpg';
   name: 'productImagePipe',
 })
 export class ProductImagePipe implements PipeTransform {
-  transform(value: string | string[]): string {
+  transform(value: null | string | string[]): string {
+
+    if (!value || value === null) {
+      return noImage;
+    }
 
     switch (typeof value) {
       case 'object': {
-        return value.length > 0 ? `${baseUrl}/files/product/${value[0]}` : `${noImage}`
+        return value!.length > 0 ? `${baseUrl}/files/product/${value![0]}` : `${noImage}`
       }
 
       case 'string': {
